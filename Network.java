@@ -74,17 +74,17 @@ public class Network {
                 // 1. FORWARD PASS
                 // =========================
 
-                // Hidden neuron 1
-                double z1 = first.rawValue(x1, x2);     
-                double firstOut = first.predict(x1, x2); 
+                // Hidden neuron 3
+                double z3 = third.rawValue(first.rawValue(x1, x2), second.rawValue(x1,x2));     
+                double thirdOut = third.predict(first.predict(x1, x2), second.predict(x1,x2)); 
 
-                // Hidden neuron 2
-                double z2 =  second.rawValue(x1, x2); 
-                double secondOut = second.predict(x1, x2);
+                // Hidden neuron 4
+                double z4 =  fourth.rawValue(first.rawValue(x1, x2), second.rawValue(x1,x2));  
+                double fourthOut = fourth.predict(first.predict(x1, x2), second.predict(x1,x2)); 
 
                 // Output neuron
-                double z3 =  out.rawValue(firstOut, secondOut); 
-                double pred = out.predict(firstOut, secondOut);
+                double z5 =  out.rawValue(thirdOut, fourthOut); 
+                double pred = out.predict(thirdOut, fourthOut);
 
                 // =========================
                 // 2. LOSS (error)
@@ -103,17 +103,17 @@ public class Network {
                 // ----- Output neuron -----
 
                 double predictionLoss = 2 * error;
-                double predDerivitive = Neuron.sigmoidDerivative(z3);
+                double predDerivitive = Neuron.sigmoidDerivative(z5);
 
                 // Gradients for output neuron weights
-                double grad_out_w1 = predictionLoss * predDerivitive * firstOut;
-                double grad_out_w2 = predictionLoss * predDerivitive * secondOut;
+                double grad_out_w1 = predictionLoss * predDerivitive * thirdOut;
+                double grad_out_w2 = predictionLoss * predDerivitive * fourthOut;
                 double grad_out_b  = predictionLoss * predDerivitive;
 
                 // ----- Hidden neurons -----
                 // Activation derivatives
-                double dz1 = Neuron.sigmoidDerivative(z1);
-                double dz2 = Neuron.sigmoidDerivative(z2);
+                double dz1 = Neuron.sigmoidDerivative(z3);
+                double dz2 = Neuron.sigmoidDerivative(z4);
 
                 // Gradients for hidden neuron 1
                 double grad_h1_w1 = predictionLoss * predDerivitive * out.w1 * dz1 * x1;
@@ -152,16 +152,15 @@ public class Network {
         ArrayList<Double> answers = new ArrayList<Double>();
         for (int i = 1; i < completeData.size(); i++)
         {
-            data.add(new double[]{Double.parseDouble(completeData.get(i).get(4)), Double.parseDouble(completeData.get(i).get(5))});
-            answers.add(Double.parseDouble(completeData.get(i).get(11)));
+            data.add(new double[]{Double.parseDouble(completeData.get(i).get(4)) / 153, Double.parseDouble(completeData.get(i).get(5)) / 171.5});
+            answers.add(Double.parseDouble(completeData.get(i).get(11)) / 10.09);
         }
         System.out.println(answers.get(0));
         
         Network network = new Network();
-        //network.train(data, answers);
+        network.train(data, answers);
         //Try making some predictions:
-        System.out.println("Should give no "+network.predict(167/365, 73/150));
-        System.out.println("Should give yes "+network.predict(30/365, 25/150));
+        System.out.println("Should give no "+network.predict(75/153, 80/171));
     }
 
 
