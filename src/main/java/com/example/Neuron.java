@@ -1,3 +1,5 @@
+package com.example;
+
 public class Neuron {
 
     // Weights for the two inputs
@@ -18,7 +20,7 @@ public class Neuron {
         return sigmoid(z);
     }
 
-	// We will need the raw output of this node for training purposes later
+    // We will need the raw output of this node for training purposes later
     public double rawValue(double x1, double x2) {
         return w1 * x1 + w2 * x2 + bias;
     }

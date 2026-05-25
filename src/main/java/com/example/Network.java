@@ -1,6 +1,10 @@
+package com.example;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,16 +36,28 @@ public class Network {
       /**
      * Reads CSV file into a 2D list of strings
      */
-    public static List<List<String>> readCSV(String filePath) {
+    public static List<List<String>> readCSV(String resourceName) {
         List<List<String>> data = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        BufferedReader br = null;
+        try {
+            InputStream is = Network.class.getResourceAsStream("/" + resourceName);
+            if (is != null) {
+                br = new BufferedReader(new InputStreamReader(is));
+            } else {
+                br = new BufferedReader(new FileReader(resourceName));
+            }
+
             String line;
             while ((line = br.readLine()) != null) {
                 data.add(Arrays.asList(line.split(",")));
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try { br.close(); } catch (IOException ignored) {}
+            }
         }
 
         return data;
