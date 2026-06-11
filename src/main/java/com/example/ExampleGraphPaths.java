@@ -59,5 +59,6 @@ public class ExampleGraphPaths {
         // as an alternative you could use the MIN_PLUS semiring to consider the existing cost specified in the startNodes vector
         CommonOpsWithSemiRing_DSCC.mult(startNodes, adjacencyMatrix, outputVector, min_times, null, null, null);
         System.out.println("The minimal cost to reach the node 2 is " + outputVector.get(0, 2));
+        
     }
 }
